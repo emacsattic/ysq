@@ -7,7 +7,7 @@
 ;; Keywords: extensions
 ;; Created: 1999-03-31
 
-;; $Id: ysq.el,v 1.6 2002/06/26 00:05:50 friedman Exp $
+;; $Id: ysq.el,v 1.7 2015/12/15 21:20:15 friedman Exp $
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 59 Temple Place, Suite 330; Boston, MA 02111-1307, USA.
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -31,11 +29,11 @@
 
 ;;; Code:
 
-(defvar ysq-server "quote.yahoo.com")
+(defvar ysq-server "download.finance.yahoo.com")
 (defvar ysq-port   "http")
 (defvar ysq-cgi    "/d/quotes.csv")
 
-(defvar ysq-query-tickers '("aol"))
+(defvar ysq-query-tickers '("spy"))
 
 (defvar ysq-query-fields
   '(ticker-symbol                       ; Should be first; search key
@@ -158,11 +156,12 @@
          (tickers (mapconcat 'identity ticker-names "+")))
 
     (ysq-send proc
-              (format "GET %s?%s&%s&%s HTTP/1.0\r\n"
+              (format "GET %s?%s&%s&%s&e=.csv HTTP/1.0\r\n"
                       ysq-cgi
                       (format "f=%s" fields)
                       (format "s=%s" tickers)
                       "e=.csv")
+              (format "Host: %s\r\n" ysq-server)
               ;; Put any http 1.0 headers here.
               "\r\n")
 
